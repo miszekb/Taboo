@@ -1,22 +1,24 @@
 import React from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-
 import useCachedResources from './hooks/useCachedResources';
-import useColorScheme from './hooks/useColorScheme';
 
 import MenuView from './views/MenuView/MenuView';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+
+import reducer from './store/reducers/reducers';
+import middleware from './store/middleware';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
-  const colorScheme = useColorScheme();
+  const store = createStore(reducer, middleware);
 
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
-      <SafeAreaProvider>
+      <Provider store={store}>
         <MenuView/>
-      </SafeAreaProvider>
+      </Provider>
     );
   }
 }
